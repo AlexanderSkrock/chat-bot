@@ -10,7 +10,9 @@ import dev.skrock.chatbot.twitch.variables.TwitchMessageVariableReplacer;
 import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import dev.skrock.chatbot.ui.SimpleChatBotUserNotification;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
@@ -38,9 +40,9 @@ public class TwitchCommandExecutor implements CommandExecutor<PrivMsgMessage> {
     }
 
     @Override
-    public PrivMsgMessage executeResponseCommand(ResponseCommand<PrivMsgMessage> command, PrivMsgMessage message) {
-        PrivMsgMessage response = command.getResponse(message);
-        response.setMessage(variableReplacer.replace(response.getMessage(), message));
-        return response;
+    public Publisher<PrivMsgMessage> executeResponseCommand(ResponseCommand<PrivMsgMessage> command, PrivMsgMessage message) {
+        return Mono.from(command.getResponse(message)).doOnSuccess(response -> {
+            response.setMessage(variableReplacer.replace(response.getMessage(), message));
+        });
     }
 }

@@ -4,22 +4,24 @@ import dev.skrock.chatbot.storage.Sound;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 @Slf4j
-public class CustomCommand implements TwitchResponseCommand, TwitchSoundCommand {
+public class CustomTwitchCommand implements TwitchResponseCommand, TwitchSoundCommand {
     private final String trigger;
     private final String response;
     private final Sound sound;
 
-    public CustomCommand(String trigger, String response) {
+    public CustomTwitchCommand(String trigger, String response) {
         this(trigger, response, null);
     }
 
-    public CustomCommand(String trigger, Sound sound) {
+    public CustomTwitchCommand(String trigger, Sound sound) {
         this(trigger, null, sound);
     }
 
-    public CustomCommand(String trigger, String response, Sound sound) {
+    public CustomTwitchCommand(String trigger, String response, Sound sound) {
         this.trigger = trigger;
         this.response = response;
         this.sound = sound;
@@ -32,8 +34,8 @@ public class CustomCommand implements TwitchResponseCommand, TwitchSoundCommand 
     }
 
     @Override
-    public PrivMsgMessage getResponse(PrivMsgMessage message) {
-        return new PrivMsgMessage(message.getChannel(), response);
+    public Publisher<PrivMsgMessage> getResponse(PrivMsgMessage message) {
+        return Mono.just(new PrivMsgMessage(message.getChannel(), response));
     }
 
     @Override

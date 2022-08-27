@@ -16,3 +16,7 @@ twitch:
   token: ""
   # Channel to join
   channel: ""
+
+discord:
+  # Look this one up at the dev page in the bot section
+  token: ""
