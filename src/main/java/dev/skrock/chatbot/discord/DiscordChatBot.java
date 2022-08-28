@@ -1,10 +1,9 @@
 package dev.skrock.chatbot.discord;
 
-import dev.skrock.chatbot.discord.mesaging.DiscordMessage;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import discord4j.core.DiscordClient;
 import discord4j.core.GatewayDiscordClient;
 import discord4j.core.event.domain.lifecycle.ReadyEvent;
-import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
@@ -37,7 +36,7 @@ public class DiscordChatBot {
         client.withGateway(gateway -> {
             registerSystemHooks(gateway);
 
-            Iterable<Publisher<DiscordMessage>> publishers = eventHandlers
+            Iterable<Publisher<DiscordMessageOut>> publishers = eventHandlers
                     .stream()
                     .map(handler -> gateway.on(handler.getSupportedClass(), handler::handleEvent))
                     .collect(Collectors.toList());

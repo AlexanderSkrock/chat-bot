@@ -6,21 +6,10 @@ import reactor.core.publisher.Mono;
 
 import java.util.Optional;
 
-public interface CommandExecutor<M extends Message> {
-    default Publisher<M> execute(Command<M> command, M message) {
-        if (command instanceof ActionCommand<M>) {
-            executeActionCommand((ActionCommand<M>) command, message);
-        }
-        if (command instanceof SoundCommand<M>) {
-            executeSoundCommand((SoundCommand<M>) command, message);
-        }
-        if (command instanceof ResponseCommand<M>) {
-            return executeResponseCommand((ResponseCommand<M>) command, message);
-        }
-        return Mono.empty();
-    }
+public interface CommandExecutor<C extends CommandContext, In extends Message, Out extends Message> {
+    C provideContextForMessage(In message);
 
-    void executeActionCommand(ActionCommand<M> command, M message);
-    void executeSoundCommand(SoundCommand<M> command, M message);
-    Publisher<M> executeResponseCommand(ResponseCommand<M> command, M message);
+    default Publisher<Out> execute(Command<C, In, Out> command, In message) {
+        return command.execute(message, provideContextForMessage(message));
+    }
 }

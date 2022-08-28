@@ -1,6 +1,6 @@
 package dev.skrock.chatbot.discord;
 
-import dev.skrock.chatbot.discord.mesaging.DiscordMessage;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import discord4j.core.event.domain.Event;
 import org.reactivestreams.Publisher;
 
@@ -15,5 +15,5 @@ public interface DiscordEventHandler<E extends Event> {
         return (E) event;
     }
 
-    Publisher<DiscordMessage> handleEvent(Event event);
+    Publisher<DiscordMessageOut> handleEvent(Event event);
 }

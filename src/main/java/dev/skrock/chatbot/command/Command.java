@@ -1,8 +1,11 @@
 package dev.skrock.chatbot.command;
 
 import dev.skrock.chatbot.messaging.Message;
+import org.reactivestreams.Publisher;
 
-public interface Command<M extends Message> {
+public interface Command<C extends CommandContext, In extends Message, Out extends Message> {
 
-    boolean matches(M message);
+    boolean matches(In message);
+
+    Publisher<Out> execute(In message, C context);
 }

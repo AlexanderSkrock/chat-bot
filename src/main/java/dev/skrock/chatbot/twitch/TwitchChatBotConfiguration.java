@@ -4,6 +4,7 @@ import dev.skrock.chatbot.storage.CustomizableCommandRepository;
 import dev.skrock.chatbot.twitch.command.CustomTwitchCommand;
 import dev.skrock.chatbot.twitch.command.EchoCommand;
 import dev.skrock.chatbot.twitch.command.TwitchChatCommand;
+import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -3,6 +3,7 @@ package dev.skrock.chatbot.discord;
 import dev.skrock.chatbot.discord.command.CustomDiscordCommand;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.discord.command.EchoCommand;
+import dev.skrock.chatbot.discord.command.SongRequestCommand;
 import dev.skrock.chatbot.storage.CustomizableCommandRepository;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -32,7 +33,8 @@ public class DiscordChatBotConfiguration {
 
     private List<DiscordChatCommand> systemCommands() {
         return List.of(
-                new EchoCommand()
+                new EchoCommand(),
+                new SongRequestCommand()
         );
     }
 

@@ -2,13 +2,15 @@ package dev.skrock.chatbot.twitch.command;
 
 import dev.skrock.chatbot.storage.Sound;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
+import dev.skrock.chatbot.ui.ChatBotUserInterface;
+import dev.skrock.chatbot.ui.SimpleChatBotUserNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
 @Slf4j
-public class CustomTwitchCommand implements TwitchResponseCommand, TwitchSoundCommand {
+public class CustomTwitchCommand implements TwitchChatCommand {
     private final String trigger;
     private final String response;
     private final Sound sound;
@@ -34,12 +36,10 @@ public class CustomTwitchCommand implements TwitchResponseCommand, TwitchSoundCo
     }
 
     @Override
-    public Publisher<PrivMsgMessage> getResponse(PrivMsgMessage message) {
+    public Publisher<PrivMsgMessage> execute(PrivMsgMessage message, TwitchCommandContext commandContext) {
+        if (sound != null) {
+            commandContext.getUserInterface().notifyUser(new SimpleChatBotUserNotification(sound));
+        }
         return Mono.just(new PrivMsgMessage(message.getChannel(), response));
-    }
-
-    @Override
-    public Sound getSound(PrivMsgMessage message) {
-        return sound;
     }
 }

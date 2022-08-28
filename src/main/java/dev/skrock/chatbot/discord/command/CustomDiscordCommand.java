@@ -1,11 +1,12 @@
 package dev.skrock.chatbot.discord.command;
 
-import dev.skrock.chatbot.discord.mesaging.DiscordMessage;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import dev.skrock.chatbot.storage.Sound;
 import org.apache.logging.log4j.util.Strings;
 import org.reactivestreams.Publisher;
 
-public class CustomDiscordCommand implements DiscordResponseCommand, DiscordSoundCommand {
+public class CustomDiscordCommand implements DiscordChatCommand {
     private final String trigger;
     private final String response;
     private final Sound sound;
@@ -25,18 +26,17 @@ public class CustomDiscordCommand implements DiscordResponseCommand, DiscordSoun
     }
 
     @Override
-    public boolean matches(DiscordMessage message) {
-        String text = message.getMessage().getContent();
+    public boolean matches(DiscordMessageIn message) {
+        String text = message.getMessageCreateEvent().getMessage().getContent();
         return Strings.isNotBlank(text) && text.startsWith(trigger);
     }
 
     @Override
-    public Publisher<DiscordMessage> getResponse(DiscordMessage message) {
-        return message.getMessage().getChannel().flatMap(channel -> channel.createMessage(response)).map(DiscordMessage::new);
-    }
+    public Publisher<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
+        // TODO implement sounds in custom commands
 
-    @Override
-    public Sound getSound(DiscordMessage message) {
-        return sound;
+        return message.getMessageCreateEvent().getMessage().getChannel()
+                .flatMap(channel -> channel.createMessage(response))
+                .map(DiscordMessageOut::new);
     }
 }

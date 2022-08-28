@@ -1,7 +1,8 @@
 package dev.skrock.chatbot.discord;
 
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
-import dev.skrock.chatbot.discord.mesaging.DiscordMessage;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
+import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import discord4j.core.event.domain.Event;
 import discord4j.core.event.domain.message.MessageCreateEvent;
 import discord4j.core.object.entity.User;
@@ -34,7 +35,7 @@ public class DiscordCommandMessageHandler implements DiscordEventHandler<Message
     }
 
     @Override
-    public Publisher<DiscordMessage> handleEvent(Event event) {
+    public Publisher<DiscordMessageOut> handleEvent(Event event) {
         MessageCreateEvent createEvent = checkEvent(event);
 
         boolean shouldSkipMessage = createEvent.getMessage().getAuthor().filter(Predicate.not(User::isBot)).isEmpty();
@@ -42,8 +43,8 @@ public class DiscordCommandMessageHandler implements DiscordEventHandler<Message
             return Mono.empty();
         }
 
-        DiscordMessage message = new DiscordMessage(createEvent.getMessage());
-        Iterable<Publisher<DiscordMessage>> responsePublishers = commands
+        DiscordMessageIn message = new DiscordMessageIn(createEvent);
+        Iterable<Publisher<DiscordMessageOut>> responsePublishers = commands
                 .stream()
                 .filter(command -> command.matches(message))
                 .map(command -> commandExecutor.execute(command, message))
