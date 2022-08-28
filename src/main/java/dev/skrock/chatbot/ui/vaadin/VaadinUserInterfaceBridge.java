@@ -6,12 +6,12 @@ import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import dev.skrock.chatbot.ui.ChatBotUserNotification;
 import dev.skrock.chatbot.ui.ChatBotUserNotificationResponse;
 import dev.skrock.chatbot.ui.vaadin.components.AudioPlayer;
-import dev.skrock.chatbot.util.FutureUtils;
 import dev.skrock.chatbot.util.StreamResourceUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Slf4j
 public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
@@ -23,7 +23,7 @@ public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
     }
 
     @Override
-    public CompletableFuture<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification userNotification) {
+    public Publisher<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification userNotification) {
         CompletableFuture<ChatBotUserNotificationResponse> future = new CompletableFuture<>();
 
         vaadinUi.accessSynchronously(() -> {
@@ -33,7 +33,10 @@ public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
                 AudioPlayer notificationSoundPlayer = new AudioPlayer();
                 notificationSoundPlayer.enableControls();
                 notificationSoundPlayer.enableAutoplay();
-                notificationSoundPlayer.onFinished(evt -> notification.close());
+                notificationSoundPlayer.onFinished(evt -> {
+                    notification.close();
+                    future.complete(null);
+                });
                 notificationSoundPlayer.setSource(StreamResourceUtils.ofSound(sound));
 
                 notification.add(notificationSoundPlayer);
@@ -45,6 +48,6 @@ public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
             notification.open();
         });
 
-        return future;
+        return Mono.fromFuture(future);
     }
 }

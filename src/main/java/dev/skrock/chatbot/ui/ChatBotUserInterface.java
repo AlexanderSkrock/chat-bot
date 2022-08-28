@@ -1,8 +1,8 @@
 package dev.skrock.chatbot.ui;
 
-import java.util.concurrent.CompletableFuture;
+import org.reactivestreams.Publisher;
 
 public interface ChatBotUserInterface {
 
-    CompletableFuture<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification);
+    Publisher<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification);
 }
