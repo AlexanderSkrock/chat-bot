@@ -8,7 +8,6 @@ import dev.skrock.chatbot.ui.ChatBotUserNotificationResponse;
 import dev.skrock.chatbot.ui.vaadin.components.AudioPlayer;
 import dev.skrock.chatbot.util.StreamResourceUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
 import java.util.concurrent.CompletableFuture;
@@ -23,7 +22,7 @@ public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
     }
 
     @Override
-    public Publisher<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification userNotification) {
+    public Mono<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification userNotification) {
         CompletableFuture<ChatBotUserNotificationResponse> future = new CompletableFuture<>();
 
         vaadinUi.accessSynchronously(() -> {

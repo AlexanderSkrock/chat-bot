@@ -1,10 +1,12 @@
-package dev.skrock.chatbot.discord.command;
+package dev.skrock.chatbot.extensions.discord;
 
+import dev.skrock.chatbot.discord.command.DiscordChatCommand;
+import dev.skrock.chatbot.discord.command.DiscordCommandContext;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import dev.skrock.chatbot.storage.Sound;
 import org.apache.logging.log4j.util.Strings;
-import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 public class CustomDiscordCommand implements DiscordChatCommand {
     private final String trigger;
@@ -32,7 +34,7 @@ public class CustomDiscordCommand implements DiscordChatCommand {
     }
 
     @Override
-    public Publisher<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
+    public Mono<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
         // TODO implement sounds in custom commands
 
         return message.getMessageCreateEvent().getMessage().getChannel()

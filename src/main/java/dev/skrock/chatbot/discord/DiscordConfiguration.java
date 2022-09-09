@@ -1,4 +1,4 @@
-package dev.skrock.chatbot.twitch;
+package dev.skrock.chatbot.discord;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -7,11 +7,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Data
 @Configuration
-@ConfigurationProperties("twitch")
+@ConfigurationProperties("discord")
 @EnableConfigurationProperties
-public class TwitchChatBotConfiguration {
+public class DiscordConfiguration {
 
-    private String username;
     private String token;
-    private String channel;
 }

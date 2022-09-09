@@ -1,8 +1,8 @@
 package dev.skrock.chatbot.ui;
 
-import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 public interface ChatBotUserInterface {
 
-    Publisher<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification);
+    Mono<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification);
 }

@@ -1,31 +1,32 @@
-package dev.skrock.chatbot.twitch;
+package dev.skrock.chatbot.extensions.twitch;
 
-import dev.skrock.chatbot.twitch.command.TwitchChatCommand;
+import dev.skrock.chatbot.command.Command;
+import dev.skrock.chatbot.twitch.command.TwitchCommandContext;
+import dev.skrock.chatbot.twitch.command.TwitchCommandExecutor;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
 import dev.skrock.chatbot.twitch.messaging.TwitchCommands;
 import dev.skrock.chatbot.twitch.messaging.TwitchMessage;
 import dev.skrock.chatbot.twitch.messaging.irc.TwitchMessageHandler;
 import dev.skrock.chatbot.twitch.messaging.irc.*;
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.util.List;
-import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Component
 public class TwitchCommandMessageHandler implements TwitchMessageHandler {
 
     private final TwitchCommandExecutor commandExecutor;
-    private final List<TwitchChatCommand> commands;
+    private final Set<? extends Command<TwitchCommandContext, PrivMsgMessage, PrivMsgMessage>> commands;
 
     @Autowired
-    public TwitchCommandMessageHandler(TwitchCommandExecutor commandExecutor, List<TwitchChatCommand> commands) {
+    public TwitchCommandMessageHandler(TwitchCommandExecutor commandExecutor, Set<? extends Command<TwitchCommandContext, PrivMsgMessage, PrivMsgMessage>> commands) {
         this.commandExecutor = commandExecutor;
         this.commands = commands;
     }
@@ -38,14 +39,14 @@ public class TwitchCommandMessageHandler implements TwitchMessageHandler {
 
         PrivMsgMessage privMsgMessage = PrivMsgMessage.ofGenericMessage(message);
 
-        Iterable<Publisher<PrivMsgMessage>> responsePublishers = commands
-                .stream()
-                .filter(command -> command.matches(privMsgMessage))
-                .map(command -> commandExecutor.execute(command, privMsgMessage))
-                .collect(Collectors.toList());
-
-        Flux.mergeSequential(responsePublishers)
-                .doOnNext(ircClient::sendMessage)
-                .doOnError(error -> log.error("Fehler beim Auswerten der Nachricht: ", error));
+        commands.forEach(command -> {
+           if (!command.matches(privMsgMessage)) {
+               return;
+           }
+           commandExecutor.execute(command, privMsgMessage).doOnNext(response -> {
+               log.debug("Sending response: {}", response);
+               ircClient.sendMessage(response);
+           }).subscribe();
+        });
     }
 }

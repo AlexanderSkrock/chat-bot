@@ -15,7 +15,13 @@ public abstract class AbstractClient<Raw, M extends Message, C extends Connectio
         this.outMessageConverter = outMessageConverter;
     }
 
-    public void init() {
+    @Override
+    public boolean isConnect() {
+        return connection.isConnected();
+    }
+
+    @Override
+    public void connect() {
         if (!connection.isConnected()) {
             connection.connect();
 
@@ -26,6 +32,14 @@ public abstract class AbstractClient<Raw, M extends Message, C extends Connectio
 
             authorize();
         }
+    }
+
+    @Override
+    public void disconnect() {
+        if (connection.isConnected()) {
+            connection.disconnect();
+        }
+        resetAuthorization();
     }
 
     public abstract void handleMessage(M message);

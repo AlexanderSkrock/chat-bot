@@ -2,7 +2,6 @@ package dev.skrock.chatbot.ui;
 
 import dev.skrock.chatbot.util.SoundUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
 import reactor.core.publisher.Mono;
 
 import javax.sound.sampled.LineUnavailableException;
@@ -12,7 +11,7 @@ import java.io.IOException;
 @Slf4j
 public class ServerSideUserInterfaceBridge implements ChatBotUserInterface {
     @Override
-    public Publisher<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification) {
+    public Mono<ChatBotUserNotificationResponse> notifyUser(ChatBotUserNotification notification) {
         notification.getMessage().ifPresent(log::info);
         notification.getSound().ifPresent(sound -> {
             try {

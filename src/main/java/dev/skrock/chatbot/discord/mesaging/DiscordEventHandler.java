@@ -1,8 +1,7 @@
-package dev.skrock.chatbot.discord;
+package dev.skrock.chatbot.discord.mesaging;
 
-import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
 import discord4j.core.event.domain.Event;
-import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
 
 public interface DiscordEventHandler<E extends Event> {
 
@@ -15,5 +14,5 @@ public interface DiscordEventHandler<E extends Event> {
         return (E) event;
     }
 
-    Publisher<DiscordMessageOut> handleEvent(Event event);
+    Mono<DiscordMessageOut> handleEvent(Event event);
 }

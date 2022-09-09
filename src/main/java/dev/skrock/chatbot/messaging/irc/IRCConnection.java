@@ -40,6 +40,17 @@ public class IRCConnection implements Connection<String> {
     }
 
     @Override
+    public void disconnect() {
+        try {
+            sock.close();
+        } catch (IOException e) {
+            log.error("Fehler beim Schließen der Verbindung", e);
+        } finally {
+            sock = null;
+        }
+    }
+
+    @Override
     public boolean isConnected() {
         return sock != null && sock.isConnected();
     }

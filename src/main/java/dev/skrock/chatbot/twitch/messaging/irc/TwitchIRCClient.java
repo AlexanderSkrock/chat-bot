@@ -43,6 +43,11 @@ public class TwitchIRCClient extends IRCClient<TwitchIRCConnection, TwitchMessag
         sendMessage(new NickMessage(this.nickname));
     }
 
+    @Override
+    public void resetAuthorization() {
+        this.isAuthorized = false;
+    }
+
     public void joinChannel() {
         sendMessage(new JoinMessage(channel));
         log.info("Joined to #" + this.channel);
@@ -59,6 +64,7 @@ public class TwitchIRCClient extends IRCClient<TwitchIRCConnection, TwitchMessag
 
     @Override
     public void handleMessage(TwitchMessage message) {
+        log.debug("Received message: {}", message);
         getDefaultHandlers().forEach(defaultHandler -> defaultHandler.handle(message, this));
         additionalHandlers.forEach(additionalHandler -> additionalHandler.handle(message, this));
     }
