@@ -2,7 +2,7 @@ package dev.skrock.chatbot.discord.music;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import dev.skrock.chatbot.audio.AudioPlayer;
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.audio.Sound;
 
 public class DiscordAudioPlayer implements AudioPlayer {
 

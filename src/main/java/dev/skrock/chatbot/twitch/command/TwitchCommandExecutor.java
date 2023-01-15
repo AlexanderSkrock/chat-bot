@@ -22,7 +22,7 @@ public class TwitchCommandExecutor implements CommandExecutor<TwitchCommandConte
 
     @Override
     public TwitchCommandContext provideContextForMessage(PrivMsgMessage message) {
-        return new TwitchCommandContext(userInterface);
+        return new TwitchVoiceCommandContext(userInterface);
     }
 
     @Override

@@ -1,7 +1,5 @@
 package dev.skrock.chatbot.extensions.discord;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.core.discord.DiscordChatBot;
 import dev.skrock.chatbot.core.discord.DiscordChatBotExtension;
@@ -9,12 +7,6 @@ import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.discord.command.DiscordCommandContext;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
-import dev.skrock.chatbot.discord.music.LavaPlayerAudioProvider;
-import dev.skrock.chatbot.discord.music.TrackScheduler;
-import discord4j.core.object.VoiceState;
-import discord4j.core.object.entity.Member;
-import discord4j.core.spec.VoiceChannelJoinSpec;
-import discord4j.voice.AudioProvider;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.util.Strings;

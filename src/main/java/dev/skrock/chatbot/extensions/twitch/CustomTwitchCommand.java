@@ -1,10 +1,10 @@
 package dev.skrock.chatbot.extensions.twitch;
 
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.audio.Sound;
+import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.twitch.command.TwitchChatCommand;
 import dev.skrock.chatbot.twitch.command.TwitchCommandContext;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
-import dev.skrock.chatbot.ui.SimpleChatBotUserNotification;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import reactor.core.publisher.Mono;
@@ -37,8 +37,8 @@ public class CustomTwitchCommand implements TwitchChatCommand {
 
     @Override
     public Mono<PrivMsgMessage> execute(PrivMsgMessage message, TwitchCommandContext commandContext) {
-        if (sound != null) {
-            commandContext.getUserInterface().notifyUser(new SimpleChatBotUserNotification(sound));
+        if (sound != null && commandContext instanceof SupportsAudioPlayback audioContext) {
+            audioContext.getAudioPlayer().play(sound);
         }
         return Mono.just(new PrivMsgMessage(message.getChannel(), response));
     }

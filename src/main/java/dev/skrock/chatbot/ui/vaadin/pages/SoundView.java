@@ -9,7 +9,8 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.audio.PreloadedSound;
+import dev.skrock.chatbot.storage.SoundEntity;
 import dev.skrock.chatbot.storage.SoundRepository;
 import dev.skrock.chatbot.ui.vaadin.MainLayout;
 import dev.skrock.chatbot.ui.vaadin.components.AudioPlayer;
@@ -29,7 +30,7 @@ public class SoundView extends VerticalLayout {
 
     private final SoundRepository soundRepository;
 
-    private final DataProvider<Sound, Void> soundProvider;
+    private final DataProvider<SoundEntity, Void> soundProvider;
 
     private final MemoryBuffer memoryBuffer = new MemoryBuffer();
 
@@ -44,11 +45,11 @@ public class SoundView extends VerticalLayout {
 
     @PostConstruct
     public void initView() {
-        Grid<Sound> grid = new Grid<>();
+        Grid<SoundEntity> grid = new Grid<>();
         grid.setItems(soundProvider);
-        grid.addColumn(Sound::getName).setHeader("Name");
+        grid.addColumn(SoundEntity::getName).setHeader("Name");
         grid.addComponentColumn(sound -> {
-            AudioPlayer player = new AudioPlayer(StreamResourceUtils.ofSound(sound));
+            AudioPlayer player = new AudioPlayer(StreamResourceUtils.ofSound(new PreloadedSound(sound.getName(), sound.getMimeType(), sound.getData())));
             player.disableControls();
             Button playButton = new Button("Play");
             playButton.addClickListener(event -> player.play());
@@ -76,7 +77,7 @@ public class SoundView extends VerticalLayout {
     }
 
     private void persistSound(String soundName, String mimeType, byte[] soundData) {
-        Sound soundToPersist = new Sound();
+        SoundEntity soundToPersist = new SoundEntity();
         soundToPersist.setName(soundName);
         soundToPersist.setMimeType(mimeType);
         soundToPersist.setData(soundData);
@@ -84,7 +85,7 @@ public class SoundView extends VerticalLayout {
     }
 
     private static class SoundEntry extends HorizontalLayout {
-        public SoundEntry(Sound sound) {
+        public SoundEntry(SoundEntity sound) {
             add(sound.getName());
             add(new Button("Abspielen"));
             add(new Button("Löschen"));

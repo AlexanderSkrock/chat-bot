@@ -1,7 +1,7 @@
 package dev.skrock.chatbot.ui;
 
-import dev.skrock.chatbot.storage.Sound;
-import lombok.Data;
+import dev.skrock.chatbot.audio.Sound;
+import dev.skrock.chatbot.storage.SoundEntity;
 
 import java.util.Optional;
 

@@ -1,10 +1,13 @@
 package dev.skrock.chatbot.extensions.discord;
 
+import dev.skrock.chatbot.audio.PreloadedSound;
+import dev.skrock.chatbot.audio.Sound;
+import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.discord.command.DiscordCommandContext;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.storage.SoundEntity;
 import org.apache.logging.log4j.util.Strings;
 import reactor.core.publisher.Mono;
 
@@ -35,7 +38,9 @@ public class CustomDiscordCommand implements DiscordChatCommand {
 
     @Override
     public Mono<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
-        // TODO implement sounds in custom commands
+        if (sound != null && commandContext instanceof SupportsAudioPlayback audioContext) {
+            audioContext.getAudioPlayer().play(sound);
+        }
 
         return message.getMessageCreateEvent().getMessage().getChannel()
                 .flatMap(channel -> channel.createMessage(response))

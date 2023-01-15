@@ -1,12 +1,15 @@
 package dev.skrock.chatbot.extensions.discord;
 
+import dev.skrock.chatbot.audio.PreloadedSound;
 import dev.skrock.chatbot.core.discord.DiscordChatBot;
 import dev.skrock.chatbot.core.discord.DiscordChatBotExtension;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.storage.CustomizableCommandRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,6 +19,7 @@ public class DiscordCustomCommandsExtension implements DiscordChatBotExtension {
 
     private final CustomizableCommandRepository commandRepository;
 
+    @Autowired
     public DiscordCustomCommandsExtension(CustomizableCommandRepository commandRepository) {
         this.commandRepository = commandRepository;
     }
@@ -57,7 +61,11 @@ public class DiscordCustomCommandsExtension implements DiscordChatBotExtension {
         return commandRepository
                 .findAll()
                 .stream()
-                .map(commandFromRepo -> new CustomDiscordCommand(commandFromRepo.getTrigger(), commandFromRepo.getResponse(), commandFromRepo.getSound()))
+                .map(commandFromRepo -> new CustomDiscordCommand(
+                        commandFromRepo.getTrigger(),
+                        commandFromRepo.getResponse(),
+                        Optional.ofNullable(commandFromRepo.getSound()).map(entity -> new PreloadedSound(entity.getName(), entity.getMimeType(), entity.getData())).orElse(null)
+                ))
                 .collect(Collectors.toSet());
     }
 }
