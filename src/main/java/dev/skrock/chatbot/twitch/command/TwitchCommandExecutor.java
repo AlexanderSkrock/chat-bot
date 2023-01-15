@@ -1,11 +1,13 @@
 package dev.skrock.chatbot.twitch.command;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import dev.skrock.chatbot.command.Command;
 import dev.skrock.chatbot.command.CommandExecutor;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
 import dev.skrock.chatbot.twitch.variables.TwitchMessageVariableReplacer;
 import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -13,16 +15,20 @@ import reactor.core.publisher.Mono;
 @Component
 public class TwitchCommandExecutor implements CommandExecutor<TwitchCommandContext, PrivMsgMessage, PrivMsgMessage> {
     private final ChatBotUserInterface userInterface;
+    private final AudioPlayerManager audioPlayerManager;
+
     private final TwitchMessageVariableReplacer variableReplacer;
 
-    public TwitchCommandExecutor(ChatBotUserInterface userInterface, TwitchMessageVariableReplacer variableReplacer) {
+    @Autowired
+    public TwitchCommandExecutor(ChatBotUserInterface userInterface, AudioPlayerManager audioPlayerManager, TwitchMessageVariableReplacer variableReplacer) {
         this.userInterface = userInterface;
+        this.audioPlayerManager = audioPlayerManager;
         this.variableReplacer = variableReplacer;
     }
 
     @Override
     public TwitchCommandContext provideContextForMessage(PrivMsgMessage message) {
-        return new TwitchVoiceCommandContext(userInterface);
+        return new TwitchVoiceCommandContext(userInterface, audioPlayerManager);
     }
 
     @Override

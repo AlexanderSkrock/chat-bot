@@ -1,20 +1,27 @@
 package dev.skrock.chatbot.twitch.music;
 
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import dev.skrock.chatbot.audio.AudioPlayer;
 import dev.skrock.chatbot.audio.Sound;
-import dev.skrock.chatbot.storage.SoundEntity;
 import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import dev.skrock.chatbot.ui.SimpleChatBotUserNotification;
-import lombok.AllArgsConstructor;
 
-@AllArgsConstructor
 public class TwitchAudioPlayer implements AudioPlayer {
 
     private final ChatBotUserInterface userInterface;
 
+    private final AudioPlayerManager audioManager;
+
+    public TwitchAudioPlayer(ChatBotUserInterface userInterface, AudioPlayerManager audioManager) {
+        this.userInterface = userInterface;
+        this.audioManager = audioManager;
+    }
+
+
     @Override
     public void play(String url) {
-        throw new UnsupportedOperationException();
+        audioManager.loadItem(url, new TwitchAudioLoadResultHandler(userInterface));
+
     }
 
     @Override

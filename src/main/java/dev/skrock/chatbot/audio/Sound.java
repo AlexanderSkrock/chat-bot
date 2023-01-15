@@ -1,12 +1,14 @@
 package dev.skrock.chatbot.audio;
 
+import org.springframework.util.MimeType;
+
 import java.io.InputStream;
 
 public interface Sound {
 
     String getName();
 
-    String getMimeType();
+    MimeType getMimeType();
 
     InputStream getStream();
 }

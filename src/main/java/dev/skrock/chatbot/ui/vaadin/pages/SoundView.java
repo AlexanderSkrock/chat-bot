@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.util.MimeType;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -49,7 +50,7 @@ public class SoundView extends VerticalLayout {
         grid.setItems(soundProvider);
         grid.addColumn(SoundEntity::getName).setHeader("Name");
         grid.addComponentColumn(sound -> {
-            AudioPlayer player = new AudioPlayer(StreamResourceUtils.ofSound(new PreloadedSound(sound.getName(), sound.getMimeType(), sound.getData())));
+            AudioPlayer player = new AudioPlayer(StreamResourceUtils.ofSound(new PreloadedSound(sound.getName(), MimeType.valueOf(sound.getMimeType()), sound.getData())));
             player.disableControls();
             Button playButton = new Button("Play");
             playButton.addClickListener(event -> player.play());

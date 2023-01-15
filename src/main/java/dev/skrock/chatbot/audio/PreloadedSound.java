@@ -1,6 +1,7 @@
 package dev.skrock.chatbot.audio;
 
 import lombok.AllArgsConstructor;
+import org.springframework.util.MimeType;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -10,7 +11,7 @@ public class PreloadedSound implements Sound {
 
     private final String name;
 
-    private final String mimeType;
+    private final MimeType mimeType;
 
     private final byte[] data;
 
@@ -20,7 +21,7 @@ public class PreloadedSound implements Sound {
     }
 
     @Override
-    public String getMimeType() {
+    public MimeType getMimeType() {
         return mimeType;
     }
 
