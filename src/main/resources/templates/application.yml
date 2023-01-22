@@ -20,3 +20,7 @@ twitch:
 discord:
   # Look this one up at the dev page in the bot section
   token: ""
+
+youtube:
+  # Look this one up at the credentials page: https://console.cloud.google.com/apis/credentials
+  token: ""

@@ -16,7 +16,7 @@ public interface AudioSearchResult {
         return () -> Collections.singletonList(audio);
     }
 
-    static AudioSearchResult multiple(List<Audio> audios) {
+    static AudioSearchResult multiple(List<? extends Audio> audios) {
         return () -> Collections.unmodifiableList(audios);
     }
 
