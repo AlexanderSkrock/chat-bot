@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.io.OutputStream;
 
 @Slf4j
 @AllArgsConstructor
@@ -23,8 +24,8 @@ public class SoundTrack implements Track {
 
     @Override
     public void load(AudioLoaderContext context) {
-        try {
-            context.outputPipe().write(sound.getData());
+        try (OutputStream outputPipe = context.outputPipe()) {
+            outputPipe.write(sound.getData());
         } catch (IOException e) {
             log.error("Fehler beim Laden des Sounds", e);
         }

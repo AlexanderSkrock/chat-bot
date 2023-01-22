@@ -7,7 +7,9 @@ import dev.skrock.chatbot.ui.ChatBotUserInterface;
 import dev.skrock.chatbot.ui.ChatBotUserNotification;
 import dev.skrock.chatbot.ui.ChatBotUserNotificationResponse;
 import dev.skrock.chatbot.ui.vaadin.components.AudioPlayer;
+import dev.skrock.chatbot.util.StreamResourceUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.MimeType;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -30,7 +32,7 @@ public class VaadinUserInterfaceBridge implements ChatBotUserInterface {
             Notification notification = new Notification();
             userNotification.getMessage().ifPresent(notification::setText);
             userNotification.getSound().ifPresent(sound -> {
-                StreamResource resource = new StreamResource(UUID.randomUUID().toString(), () -> sound);
+                StreamResource resource = StreamResourceUtils.getStreamResource(UUID.randomUUID().toString(), new MimeType("audio", "mpeg"), sound);
 
                 AudioPlayer notificationSoundPlayer = new AudioPlayer();
                 notificationSoundPlayer.enableControls();

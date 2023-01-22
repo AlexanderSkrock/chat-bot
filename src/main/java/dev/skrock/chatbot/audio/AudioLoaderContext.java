@@ -4,5 +4,5 @@ import java.io.PipedOutputStream;
 
 public interface AudioLoaderContext {
 
-    PipedOutputStream outputPipe();
+    AudioPipe.AudioOutputPipe outputPipe();
 }

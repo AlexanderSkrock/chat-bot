@@ -7,9 +7,9 @@ import java.io.PipedOutputStream;
 @AllArgsConstructor
 public class DefaultAudioLoaderContext implements AudioLoaderContext {
 
-    private final PipedOutputStream output;
+    private final AudioPipe audioPipe;
 
-    public PipedOutputStream outputPipe() {
-        return output;
+    public AudioPipe.AudioOutputPipe outputPipe() {
+        return audioPipe.outputPipe();
     }
 }
