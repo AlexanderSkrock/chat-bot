@@ -9,7 +9,6 @@ import com.vaadin.flow.component.upload.Upload;
 import com.vaadin.flow.component.upload.receivers.MemoryBuffer;
 import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
-import dev.skrock.chatbot.audio.PreloadedSound;
 import dev.skrock.chatbot.storage.SoundEntity;
 import dev.skrock.chatbot.storage.SoundRepository;
 import dev.skrock.chatbot.ui.vaadin.MainLayout;
@@ -50,7 +49,7 @@ public class SoundView extends VerticalLayout {
         grid.setItems(soundProvider);
         grid.addColumn(SoundEntity::getName).setHeader("Name");
         grid.addComponentColumn(sound -> {
-            AudioPlayer player = new AudioPlayer(StreamResourceUtils.ofSound(new PreloadedSound(sound.getName(), MimeType.valueOf(sound.getMimeType()), sound.getData())));
+            AudioPlayer player = new AudioPlayer(StreamResourceUtils.getStreamResource(sound.getName(), MimeType.valueOf(sound.getMimeType()), sound.getData()));
             player.disableControls();
             Button playButton = new Button("Play");
             playButton.addClickListener(event -> player.play());

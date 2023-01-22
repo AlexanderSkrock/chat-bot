@@ -1,5 +1,6 @@
 package dev.skrock.chatbot.extensions.discord;
 
+import dev.skrock.chatbot.audio.sources.DefaultLoadResultHandler;
 import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.core.discord.DiscordChatBot;
 import dev.skrock.chatbot.core.discord.DiscordChatBotExtension;
@@ -62,13 +63,10 @@ public class DiscordSongRequestExtension implements DiscordChatBotExtension {
 
         @Override
         public Mono<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
-            if (!(commandContext instanceof SupportsAudioPlayback)) {
-                return Mono.empty();
+            if (commandContext instanceof SupportsAudioPlayback soundContext) {
+                String requestedAudioString = StringUtils.substringAfter(message.getMessageCreateEvent().getMessage().getContent(), SONG_REQUEST_COMMAND_TRIGGER + " ");
+                soundContext.getAudioLoader().load(() -> requestedAudioString, new DefaultLoadResultHandler(soundContext.getAudioPlayer()));
             }
-
-            String requestedAudioString = StringUtils.substringAfter(message.getMessageCreateEvent().getMessage().getContent(), SONG_REQUEST_COMMAND_TRIGGER + " ");
-            ((SupportsAudioPlayback) commandContext).getAudioPlayer().play(requestedAudioString);
-
             return Mono.empty();
         }
     }

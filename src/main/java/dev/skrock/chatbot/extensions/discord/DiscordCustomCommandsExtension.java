@@ -1,6 +1,6 @@
 package dev.skrock.chatbot.extensions.discord;
 
-import dev.skrock.chatbot.audio.PreloadedSound;
+import dev.skrock.chatbot.audio.sources.SoundTrack;
 import dev.skrock.chatbot.core.discord.DiscordChatBot;
 import dev.skrock.chatbot.core.discord.DiscordChatBotExtension;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
@@ -8,7 +8,6 @@ import dev.skrock.chatbot.storage.CustomizableCommandRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.MimeType;
 
 import java.util.Optional;
 import java.util.Set;
@@ -65,7 +64,7 @@ public class DiscordCustomCommandsExtension implements DiscordChatBotExtension {
                 .map(commandFromRepo -> new CustomDiscordCommand(
                         commandFromRepo.getTrigger(),
                         commandFromRepo.getResponse(),
-                        Optional.ofNullable(commandFromRepo.getSound()).map(entity -> new PreloadedSound(entity.getName(), MimeType.valueOf(entity.getMimeType()), entity.getData())).orElse(null)
+                        Optional.ofNullable(commandFromRepo.getSound()).map(SoundTrack::new).orElse(null)
                 ))
                 .collect(Collectors.toSet());
     }

@@ -1,30 +1,28 @@
 package dev.skrock.chatbot.extensions.discord;
 
-import dev.skrock.chatbot.audio.PreloadedSound;
-import dev.skrock.chatbot.audio.Sound;
+import dev.skrock.chatbot.audio.Track;
 import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.discord.command.DiscordCommandContext;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
-import dev.skrock.chatbot.storage.SoundEntity;
 import org.apache.logging.log4j.util.Strings;
 import reactor.core.publisher.Mono;
 
 public class CustomDiscordCommand implements DiscordChatCommand {
     private final String trigger;
     private final String response;
-    private final Sound sound;
+    private final Track sound;
 
     public CustomDiscordCommand(String trigger, String response) {
         this(trigger, response, null);
     }
 
-    public CustomDiscordCommand(String trigger, Sound sound) {
+    public CustomDiscordCommand(String trigger, Track sound) {
         this(trigger, null, sound);
     }
 
-    public CustomDiscordCommand(String trigger, String response, Sound sound) {
+    public CustomDiscordCommand(String trigger, String response, Track sound) {
         this.trigger = trigger;
         this.response = response;
         this.sound = sound;

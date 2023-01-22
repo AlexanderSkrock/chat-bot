@@ -1,6 +1,6 @@
 package dev.skrock.chatbot.twitch.command;
 
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
+import dev.skrock.chatbot.audio.sources.AudioLoader;
 import dev.skrock.chatbot.command.Command;
 import dev.skrock.chatbot.command.CommandExecutor;
 import dev.skrock.chatbot.twitch.messaging.PrivMsgMessage;
@@ -15,20 +15,21 @@ import reactor.core.publisher.Mono;
 @Component
 public class TwitchCommandExecutor implements CommandExecutor<TwitchCommandContext, PrivMsgMessage, PrivMsgMessage> {
     private final ChatBotUserInterface userInterface;
-    private final AudioPlayerManager audioPlayerManager;
+
+    private final AudioLoader audioLoader;
 
     private final TwitchMessageVariableReplacer variableReplacer;
 
     @Autowired
-    public TwitchCommandExecutor(ChatBotUserInterface userInterface, AudioPlayerManager audioPlayerManager, TwitchMessageVariableReplacer variableReplacer) {
+    public TwitchCommandExecutor(ChatBotUserInterface userInterface, AudioLoader audioLoader, TwitchMessageVariableReplacer variableReplacer) {
         this.userInterface = userInterface;
-        this.audioPlayerManager = audioPlayerManager;
+        this.audioLoader = audioLoader;
         this.variableReplacer = variableReplacer;
     }
 
     @Override
     public TwitchCommandContext provideContextForMessage(PrivMsgMessage message) {
-        return new TwitchVoiceCommandContext(userInterface, audioPlayerManager);
+        return new TwitchVoiceCommandContext(audioLoader, userInterface);
     }
 
     @Override

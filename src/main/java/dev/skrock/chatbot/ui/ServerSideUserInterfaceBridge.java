@@ -1,6 +1,5 @@
 package dev.skrock.chatbot.ui;
 
-import dev.skrock.chatbot.audio.Sound;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -9,6 +8,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.IOException;
+import java.io.InputStream;
 
 @Slf4j
 public class ServerSideUserInterfaceBridge implements ChatBotUserInterface {
@@ -25,9 +25,9 @@ public class ServerSideUserInterfaceBridge implements ChatBotUserInterface {
         return Mono.empty();
     }
 
-    protected void playSound(Sound sound) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
+    protected void playSound(InputStream audioStream) throws LineUnavailableException, UnsupportedAudioFileException, IOException {
         Clip clip = AudioSystem.getClip();
-        clip.open(AudioSystem.getAudioInputStream(sound.getStream()));
+        clip.open(AudioSystem.getAudioInputStream(audioStream));
         clip.start();
     }
 }

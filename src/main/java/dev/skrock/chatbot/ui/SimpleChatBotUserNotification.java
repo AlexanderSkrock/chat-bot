@@ -1,24 +1,22 @@
 package dev.skrock.chatbot.ui;
 
-import dev.skrock.chatbot.audio.Sound;
-import dev.skrock.chatbot.storage.SoundEntity;
-
+import java.io.InputStream;
 import java.util.Optional;
 
 public class SimpleChatBotUserNotification implements ChatBotUserNotification {
 
     private final String message;
-    private final Sound sound;
+    private final InputStream sound;
 
     public SimpleChatBotUserNotification(String message) {
         this(message, null);
     }
 
-    public SimpleChatBotUserNotification(Sound sound) {
+    public SimpleChatBotUserNotification(InputStream sound) {
         this(null, sound);
     }
 
-    public SimpleChatBotUserNotification(String message, Sound sound) {
+    public SimpleChatBotUserNotification(String message, InputStream sound) {
         this.message = message;
         this.sound = sound;
     }
@@ -29,7 +27,7 @@ public class SimpleChatBotUserNotification implements ChatBotUserNotification {
     }
 
     @Override
-    public Optional<Sound> getSound() {
+    public Optional<InputStream> getSound() {
         return Optional.ofNullable(sound);
     }
 }
