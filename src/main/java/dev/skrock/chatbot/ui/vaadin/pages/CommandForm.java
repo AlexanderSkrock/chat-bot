@@ -8,7 +8,7 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.PropertyId;
 import dev.skrock.chatbot.storage.CustomizableCommand;
 import dev.skrock.chatbot.storage.CustomizableCommandRepository;
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.storage.SoundEntity;
 import dev.skrock.chatbot.storage.SoundRepository;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,7 @@ public class CommandForm extends FormLayout {
     @PropertyId("response")
     private final TextField response = new TextField("Response");
     @PropertyId("sound")
-    private final ComboBox<Sound> sound = new ComboBox<>("Sound");
+    private final ComboBox<SoundEntity> sound = new ComboBox<>("Sound");
 
     private final Binder<CustomizableCommand> binder = new Binder<>(CustomizableCommand.class);
 
@@ -32,7 +32,7 @@ public class CommandForm extends FormLayout {
         this.soundRepository = soundRepository;
 
         sound.setItems(soundRepository.findAll());
-        sound.setItemLabelGenerator(Sound::getName);
+        sound.setItemLabelGenerator(SoundEntity::getName);
 
         add(trigger);
         add(response);

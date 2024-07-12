@@ -1,27 +1,28 @@
 package dev.skrock.chatbot.extensions.discord;
 
+import dev.skrock.chatbot.audio.Track;
+import dev.skrock.chatbot.command.SupportsAudioPlayback;
 import dev.skrock.chatbot.discord.command.DiscordChatCommand;
 import dev.skrock.chatbot.discord.command.DiscordCommandContext;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageIn;
 import dev.skrock.chatbot.discord.mesaging.DiscordMessageOut;
-import dev.skrock.chatbot.storage.Sound;
 import org.apache.logging.log4j.util.Strings;
 import reactor.core.publisher.Mono;
 
 public class CustomDiscordCommand implements DiscordChatCommand {
     private final String trigger;
     private final String response;
-    private final Sound sound;
+    private final Track sound;
 
     public CustomDiscordCommand(String trigger, String response) {
         this(trigger, response, null);
     }
 
-    public CustomDiscordCommand(String trigger, Sound sound) {
+    public CustomDiscordCommand(String trigger, Track sound) {
         this(trigger, null, sound);
     }
 
-    public CustomDiscordCommand(String trigger, String response, Sound sound) {
+    public CustomDiscordCommand(String trigger, String response, Track sound) {
         this.trigger = trigger;
         this.response = response;
         this.sound = sound;
@@ -35,7 +36,9 @@ public class CustomDiscordCommand implements DiscordChatCommand {
 
     @Override
     public Mono<DiscordMessageOut> execute(DiscordMessageIn message, DiscordCommandContext commandContext) {
-        // TODO implement sounds in custom commands
+        if (sound != null && commandContext instanceof SupportsAudioPlayback audioContext) {
+            audioContext.getAudioPlayer().play(sound);
+        }
 
         return message.getMessageCreateEvent().getMessage().getChannel()
                 .flatMap(channel -> channel.createMessage(response))

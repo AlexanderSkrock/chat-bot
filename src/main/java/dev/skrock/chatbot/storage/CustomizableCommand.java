@@ -16,5 +16,5 @@ public class CustomizableCommand {
     private String response;
 
     @OneToOne
-    private Sound sound;
+    private SoundEntity sound;
 }

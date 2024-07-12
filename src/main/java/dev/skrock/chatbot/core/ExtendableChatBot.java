@@ -9,7 +9,7 @@ public abstract class ExtendableChatBot<SELF extends ExtendableChatBot<SELF>> im
 
     protected Collection<ChatBotExtension<SELF>> extensions = new LinkedList<>();
 
-    public ExtendableChatBot(Collection<ChatBotExtension<SELF>> extensions) {
+    protected ExtendableChatBot(Collection<ChatBotExtension<SELF>> extensions) {
         this.extensions.addAll(extensions);
     }
 

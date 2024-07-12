@@ -6,7 +6,7 @@ import com.vaadin.flow.data.provider.DataProvider;
 import com.vaadin.flow.router.Route;
 import dev.skrock.chatbot.storage.CustomizableCommand;
 import dev.skrock.chatbot.storage.CustomizableCommandRepository;
-import dev.skrock.chatbot.storage.Sound;
+import dev.skrock.chatbot.storage.SoundEntity;
 import dev.skrock.chatbot.storage.SoundRepository;
 import dev.skrock.chatbot.ui.vaadin.MainLayout;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class CommandsView extends VerticalLayout {
         grid.setItems(commandProvider);
         grid.addColumn(CustomizableCommand::getTrigger).setHeader("Trigger");
         grid.addColumn(CustomizableCommand::getResponse).setHeader("Response");
-        grid.addColumn(command -> Optional.ofNullable(command.getSound()).map(Sound::getName).orElse(null)).setHeader("Sound");
+        grid.addColumn(command -> Optional.ofNullable(command.getSound()).map(SoundEntity::getName).orElse(null)).setHeader("Sound");
         add(grid);
 
         add(new CommandForm(commandRepository, soundRepository));
