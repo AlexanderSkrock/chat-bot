@@ -1,0 +1,48 @@
+name: Integration Build
+
+on:
+  schedule:
+    - cron: "0 2 * * *"     # Runs at 2:00 AM UTC daily
+  workflow_dispatch:        # Allows manual trigger
+    inputs:
+      dry_run:
+        description: 'Release: Skips remote operations when true'
+        type: boolean
+        required: true
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  detect-recent-changes:
+    name: Detect recent changes
+    runs-on: ubuntu-24.04
+    outputs:
+      recent_changes: ${{steps.check-commits.outputs.commits}}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check for recent commits
+        id: check-commits
+        run: |
+          COMMITS=$(git rev-list --since="24 hours ago" HEAD)
+          if [ -z "$COMMITS" ]; then
+            echo "🔎❌ No commits in the last 24 hours detected."
+            echo "commits=false" >> $GITHUB_OUTPUT
+          else
+            echo "🔎✔️ Commits within the last 24 hours detected."
+            echo "commits=true" >> $GITHUB_OUTPUT
+          fi
+
+  build:
+    name: Build
+    runs-on: ubuntu-24.04
+    needs: detect-recent-changes
+    if: ${{ (inputs.dry_run && needs.detect-recent-changes.outputs.recent_changes == 'true') }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
